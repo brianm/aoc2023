@@ -38,6 +38,8 @@ class GameVisitor(NodeVisitor):
     def generic_visit(self, node, visited_children):
         return visited_children 
 
+visitor = GameVisitor()
+
 def part1(data: str) -> int:
     def possible(game) -> bool:
         top = top = {'red':0, 'green':0, 'blue':0,}
@@ -49,7 +51,7 @@ def part1(data: str) -> int:
         return top['red'] <= 12 and top['blue'] <= 14 and top['green'] <= 13
     
     sum = 0
-    for game in [GameVisitor().visit(grammar.parse(line)) for line in data.splitlines()]:
+    for game in [visitor.visit(grammar.parse(line)) for line in data.splitlines()]:
         if possible(game[1]):
             sum += game[0]
     return sum
