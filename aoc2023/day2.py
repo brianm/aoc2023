@@ -73,7 +73,36 @@ def part1(data: str) -> int:
             sum += game[0]
     return sum
 
+def part2(data: str) -> int:
+    def power(game) -> int:
+        """
+        [
+            [(6, 'red'), (1, 'blue'), (3, 'green')], 
+            [(2, 'blue'), (1, 'red'), (2, 'green')]
+        ]
+        """
+        top = {
+            'red':0,
+            'green':0,
+            'blue':0,         
+        }
+        for draw in game:
+            for count, color in draw:                
+                if count > top[color]:
+                    top[color] = count
+
+        return top['red'] * top['blue'] * top['green']
+    
+    sum = 0
+    for line in data.splitlines():
+        v = Part1Visitor()
+        tree = grammar.parse(line)
+        game = v.visit(tree)
+        print(game)
+        sum += power(game[1])        
+    return sum
 
 if __name__ == '__main__':    
     input = sys.stdin.read()
     print("part 1", part1(input))
+    print("part 2", part2(input))
