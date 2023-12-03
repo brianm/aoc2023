@@ -49,8 +49,7 @@ def part1(data: str) -> int:
         return top['red'] <= 12 and top['blue'] <= 14 and top['green'] <= 13
     
     sum = 0
-    for line in data.splitlines():        
-        game = GameVisitor().visit(grammar.parse(line))
+    for game in [GameVisitor().visit(grammar.parse(line)) for line in data.splitlines()]:
         if possible(game[1]):
             sum += game[0]
     return sum
