@@ -3,27 +3,26 @@ from parsimonious import Grammar, NodeVisitor
 
 grammar = Grammar(
     r"""
-    game    = gameId ws ":" ws (draw ";"? ws)+ 
-    gameId  = "Game" ws number
+    game    = game_id ws ":" ws (draw ";"? ws)+ 
+    game_id  = "Game" ws number
     draw    = (marbles ","? ws)+ 
     marbles = number ws color ws
-    number  = ("0"/"1"/"2"/"3"/"4"/"5"/"6"/"7"/"8"/"9")+
+    number  = ~"\\d+"
     color   = "red" / "blue" / "green" / "yellow"
     ws      = ~"\\s*"
     """
 )
 
-class Part1Visitor(NodeVisitor):
+class GameVisitor(NodeVisitor):
     def visit_game(self, node, visited_children):        
-        game_id, _, _, _, draws = visited_children              
-        draws = [draw for draw, _, _ in draws]            
-        return game_id, draws
+        game_id, _, _, _, draws = visited_children        
+        return game_id, [draw for draw, _, _ in draws]        
     
-    def visit_gameId(self, node, visited_children):
+    def visit_game_id(self, node, visited_children):
         _, _, game_id = visited_children
         return int(game_id)
     
-    def visit_draw(self, node, visited_children):
+    def visit_draw(self, node, visited_children):        
         return [draw for draw, _, _ in visited_children]
     
     def visit_marbles(self, node, visited_children):
@@ -35,57 +34,30 @@ class Part1Visitor(NodeVisitor):
 
     def visit_color(self, node, visited_children):        
         return node.text
-
-    def visit_ws(self, node, visited_children):
-        return None
     
     def generic_visit(self, node, visited_children):
         return visited_children 
 
 def part1(data: str) -> int:
     def possible(game) -> bool:
-        """
-        [
-            [(6, 'red'), (1, 'blue'), (3, 'green')], 
-            [(2, 'blue'), (1, 'red'), (2, 'green')]
-        ]
-        """
-        top = {
-            'red':0,
-            'green':0,
-            'blue':0,         
-        }
+        top = top = {'red':0, 'green':0, 'blue':0,}
         for draw in game:
             for count, color in draw:                
                 if count > top[color]:
                     top[color] = count
 
-        if top['red'] <= 12 and top['blue'] <= 14 and top['green'] <= 13:
-            return True
-        return False
+        return top['red'] <= 12 and top['blue'] <= 14 and top['green'] <= 13
     
     sum = 0
-    for line in data.splitlines():
-        v = Part1Visitor()
-        tree = grammar.parse(line)
-        game = v.visit(tree)
+    for line in data.splitlines():        
+        game = GameVisitor().visit(grammar.parse(line))
         if possible(game[1]):
             sum += game[0]
     return sum
 
 def part2(data: str) -> int:
     def power(game) -> int:
-        """
-        [
-            [(6, 'red'), (1, 'blue'), (3, 'green')], 
-            [(2, 'blue'), (1, 'red'), (2, 'green')]
-        ]
-        """
-        top = {
-            'red':0,
-            'green':0,
-            'blue':0,         
-        }
+        top = {'red':0, 'green':0, 'blue':0,}
         for draw in game:
             for count, color in draw:                
                 if count > top[color]:
@@ -95,10 +67,9 @@ def part2(data: str) -> int:
     
     sum = 0
     for line in data.splitlines():
-        v = Part1Visitor()
+        v = GameVisitor()
         tree = grammar.parse(line)
         game = v.visit(tree)
-        print(game)
         sum += power(game[1])        
     return sum
 
