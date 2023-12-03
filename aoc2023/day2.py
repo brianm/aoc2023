@@ -43,14 +43,37 @@ class Part1Visitor(NodeVisitor):
         return visited_children 
 
 def part1(data: str) -> int:
+    def possible(game) -> bool:
+        """
+        [
+            [(6, 'red'), (1, 'blue'), (3, 'green')], 
+            [(2, 'blue'), (1, 'red'), (2, 'green')]
+        ]
+        """
+        top = {
+            'red':0,
+            'green':0,
+            'blue':0,         
+        }
+        for draw in game:
+            for count, color in draw:                
+                if count > top[color]:
+                    top[color] = count
+
+        if top['red'] <= 12 and top['blue'] <= 14 and top['green'] <= 13:
+            return True
+        return False
+    
+    sum = 0
     for line in data.splitlines():
         v = Part1Visitor()
         tree = grammar.parse(line)
         game = v.visit(tree)
-        print(game)
-    return 0
+        if possible(game[1]):
+            sum += game[0]
+    return sum
 
 
 if __name__ == '__main__':    
     input = sys.stdin.read()
-    part1(input)
+    print("part 1", part1(input))
