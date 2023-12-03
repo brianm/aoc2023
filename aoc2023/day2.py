@@ -47,10 +47,8 @@ def part1(data: str) -> int:
     for line in data.splitlines():
         v = Part1Visitor()
         tree = grammar.parse(line)
-        #print(tree)
-        #print()
         game = v.visit(tree)
-        print(f"{game}")
+        print(game)
     return 0
 
 
