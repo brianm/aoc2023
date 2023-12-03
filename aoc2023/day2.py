@@ -1,12 +1,10 @@
-from collections.abc import Sequence
 import sys
-import re
 from parsimonious import Grammar, NodeVisitor
 
 grammar = Grammar(
     r"""
     game = gameId ws ":" ws (draw ";"? ws)+ 
-    gameId = "Game" ws ~"[0-9]+"        
+    gameId = "Game" ws number
     draw = (marbles ","? ws)+ 
     marbles = number ws color ws
     number = ("0"/"1"/"2"/"3"/"4"/"5"/"6"/"7"/"8"/"9")+
@@ -22,7 +20,8 @@ class Part1Visitor(NodeVisitor):
         return game_id, draws
     
     def visit_gameId(self, node, visited_children):
-        return node.text
+        _, _, game_id = visited_children
+        return int(game_id)
     
     def visit_draw(self, node, visited_children):
         return [draw for draw, _, _ in visited_children]
