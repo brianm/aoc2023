@@ -7,14 +7,14 @@ grammar = Grammar(
     game_id  = "Game" ws number
     draw    = (marbles ","? ws)+ 
     marbles = number ws color ws
-    number  = ~"\\d+"
+    number  = ("0"/"1"/"2"/"3"/"4"/"5"/"6"/"7"/"8"/"9")+
     color   = "red" / "blue" / "green" / "yellow"
-    ws      = ~"\\s*"
+    ws   = " "*
     """
 )
 
 class GameVisitor(NodeVisitor):
-    def visit_game(self, node, visited_children):        
+    def visit_game(self, node, visited_children):
         game_id, _, _, _, draws = visited_children        
         return game_id, [draw for draw, _, _ in draws]        
     
@@ -40,24 +40,23 @@ class GameVisitor(NodeVisitor):
 
 visitor = GameVisitor()
 
-def part1(data: str) -> int:
-    def possible(game) -> bool:
+def part1(data: list[str]) -> int:
+    def possible(game: list[list[tuple[int, str]]]) -> bool:
         top = top = {'red':0, 'green':0, 'blue':0,}
         for draw in game:
             for count, color in draw:                
                 if count > top[color]:
                     top[color] = count
-
         return top['red'] <= 12 and top['blue'] <= 14 and top['green'] <= 13
-    
+
     sum = 0
-    for game in [visitor.visit(grammar.parse(line)) for line in data.splitlines()]:
-        if possible(game[1]):
-            sum += game[0]
+    for id, draws in [visitor.visit(grammar.parse(line)) for line in data]:
+        if possible(draws):
+            sum += id
     return sum
 
-def part2(data: str) -> int:
-    def power(game) -> int:
+def part2(data: list[str]) -> int:
+    def power(game: list[list[tuple[int, str]]]) -> int:
         top = {'red':0, 'green':0, 'blue':0,}
         for draw in game:
             for count, color in draw:                
@@ -67,14 +66,11 @@ def part2(data: str) -> int:
         return top['red'] * top['blue'] * top['green']
     
     sum = 0
-    for line in data.splitlines():
-        v = GameVisitor()
-        tree = grammar.parse(line)
-        game = v.visit(tree)
-        sum += power(game[1])        
+    for _, draws in [visitor.visit(grammar.parse(line)) for line in data]:
+        sum += power(draws)        
     return sum
 
 if __name__ == '__main__':    
     input = sys.stdin.read()
-    print("part 1", part1(input))
-    print("part 2", part2(input))
+    print("part 1", part1(input.splitlines()))
+    print("part 2", part2(input.splitlines()))
