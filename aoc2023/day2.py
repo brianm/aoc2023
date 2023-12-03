@@ -42,7 +42,7 @@ visitor = GameVisitor()
 
 def part1(data: list[str]) -> int:
     def possible(game: list[list[tuple[int, str]]]) -> bool:
-        top = top = {'red':0, 'green':0, 'blue':0,}
+        top = {'red':0, 'green':0, 'blue':0,}
         for draw in game:
             for count, color in draw:                
                 if count > top[color]:
