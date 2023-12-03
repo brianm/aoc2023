@@ -1,6 +1,6 @@
 import sys
 import re
-from parsimonious import Grammar
+from parsimonious import Grammar, NodeVisitor
 
 grammar = Grammar(
     r"""
@@ -14,11 +14,15 @@ grammar = Grammar(
     """
 )
 
+class Part1Visitor(NodeVisitor):
+    def visit_game(self, node, visited_children):
+        print("visit_game", node, visited_children)
+
 def part1(data: str) -> int:
     for line in data.splitlines():
-        print(line)
-        match = grammar.parse(line)        
-        print(match)
+        print(line)        
+        v = Part1Visitor()
+        v.visit(grammar.parse(line))
     return 0
 
 
