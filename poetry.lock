@@ -48,6 +48,20 @@ files = [
 ]
 
 [[package]]
+name = "parsimonious"
+version = "0.10.0"
+description = "(Soon to be) the fastest pure-Python PEG parser I could muster"
+optional = false
+python-versions = "*"
+files = [
+    {file = "parsimonious-0.10.0-py3-none-any.whl", hash = "sha256:982ab435fabe86519b57f6b35610aa4e4e977e9f02a14353edf4bbc75369fc0f"},
+    {file = "parsimonious-0.10.0.tar.gz", hash = "sha256:8281600da180ec8ae35427a4ab4f7b82bfec1e3d1e52f80cb60ea82b9512501c"},
+]
+
+[package.dependencies]
+regex = ">=2022.3.15"
+
+[[package]]
 name = "pluggy"
 version = "1.3.0"
 description = "plugin and hook calling mechanisms for python"
@@ -182,4 +196,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "9025ce454d21c785bde4270f439867212d349f4db17afb21f2228af52fe53075"
+content-hash = "a630a0add2ec80f891900491ca821ace87e1710732e4faad2ac4094ae177db45"

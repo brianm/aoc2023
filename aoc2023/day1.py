@@ -1,7 +1,6 @@
 import re
-from typing import Tuple
 
-def digits(line) -> Tuple[int, int]:
+def digits(line) -> tuple[int, int]:
     digits = [c for c in line if c.isdigit()]        
     return digits[0], digits[-1]
 
@@ -12,7 +11,7 @@ def process(data) -> int:
         count += int(one+two)
     return count
 
-def process2(data) -> Tuple[int, int]:
+def process2(data) -> tuple[int, int]:
     sum1 = 0
     sum2 = 0
     for line in data.splitlines():
@@ -27,7 +26,7 @@ def process2(data) -> Tuple[int, int]:
 
     return sum1, sum2
 
-def doline1(line) -> Tuple[int, int]:
+def doline1(line) -> tuple[int, int]:
     values = {'zero':0, 'one':1, 'two':2, 'three':3, 'four':4, 'five':5,
             'six':6, 'seven': 7, 'eight': 8, 'nine':9}
 
@@ -47,7 +46,7 @@ def doline1(line) -> Tuple[int, int]:
         last = values[last]
     return first,last
 
-def doline2(line) -> Tuple[int, int]:
+def doline2(line) -> tuple[int, int]:
     line = line.replace("zero", "zero0zero")
     line = line.replace("one", "one1one")
     line = line.replace("two", "two2two")
@@ -64,5 +63,5 @@ def doline2(line) -> Tuple[int, int]:
 if __name__ == '__main__':
     import sys
     input = sys.stdin.read()
-    #print("Part1: ", process(input))    
+    print("Part1: ", process(input))    
     print("Part2: ", process2(input))    
