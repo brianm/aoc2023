@@ -3,13 +3,13 @@ from parsimonious import Grammar, NodeVisitor
 
 grammar = Grammar(
     r"""
-    game = gameId ws ":" ws (draw ";"? ws)+ 
-    gameId = "Game" ws number
-    draw = (marbles ","? ws)+ 
+    game    = gameId ws ":" ws (draw ";"? ws)+ 
+    gameId  = "Game" ws number
+    draw    = (marbles ","? ws)+ 
     marbles = number ws color ws
-    number = ("0"/"1"/"2"/"3"/"4"/"5"/"6"/"7"/"8"/"9")+
-    color = "red" / "blue" / "green" / "yellow"
-    ws          = ~"\\s*"
+    number  = ("0"/"1"/"2"/"3"/"4"/"5"/"6"/"7"/"8"/"9")+
+    color   = "red" / "blue" / "green" / "yellow"
+    ws      = ~"\\s*"
     """
 )
 
