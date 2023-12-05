@@ -13,26 +13,30 @@ grammar = Grammar(
     """
 )
 
+Marbles = tuple[int, str]
+Draw = list[tuple[int, str]]
+Game = list[Draw]
+
 class GameVisitor(NodeVisitor):
-    def visit_game(self, node, visited_children):
+    def visit_game(self, node, visited_children) -> tuple[int, Game]:
         game_id, _, draws = visited_children        
         return game_id, [draw for draw, _, _ in draws]        
     
-    def visit_game_id(self, node, visited_children):
+    def visit_game_id(self, node, visited_children) -> int:
         _, _, game_id = visited_children
         return int(game_id)
     
-    def visit_draw(self, node, visited_children):        
+    def visit_draw(self, node, visited_children) -> Draw:        
         return [draw for draw, _, _ in visited_children]
     
-    def visit_marbles(self, node, visited_children):
+    def visit_marbles(self, node, visited_children) -> Marbles:
         num, _, color, _= visited_children        
         return (num, color)
 
-    def visit_number(self, node, visited_children):
+    def visit_number(self, node, visited_children) -> int:
         return int(node.text)
 
-    def visit_color(self, node, visited_children):        
+    def visit_color(self, node, visited_children) -> str:        
         return node.text
     
     def generic_visit(self, node, visited_children):
@@ -41,7 +45,7 @@ class GameVisitor(NodeVisitor):
 visitor = GameVisitor()
 
 def part1(data: list[str]) -> int:
-    def possible(game: list[list[tuple[int, str]]]) -> bool:
+    def possible(game: Game) -> bool:
         top = {'red':0, 'green':0, 'blue':0,}
         for draw in game:
             for count, color in draw:                
@@ -56,7 +60,7 @@ def part1(data: list[str]) -> int:
     return sum
 
 def part2(data: list[str]) -> int:
-    def power(game: list[list[tuple[int, str]]]) -> int:
+    def power(game: Game) -> int:
         top = {'red':0, 'green':0, 'blue':0,}
         for draw in game:
             for count, color in draw:                
