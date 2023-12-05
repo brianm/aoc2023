@@ -3,19 +3,19 @@ from parsimonious import Grammar, NodeVisitor
 
 grammar = Grammar(
     r"""
-    game    = game_id ws ":" ws (draw ";"? ws)+ 
-    game_id  = "Game" ws number
-    draw    = (marbles ","? ws)+ 
-    marbles = number ws color ws
+    game    = game_id (":" _) (draw ";"? _)+ 
+    game_id  = "Game" _ number
+    draw    = (marbles ","? _)+ 
+    marbles = number _ color _
     number  = ("0"/"1"/"2"/"3"/"4"/"5"/"6"/"7"/"8"/"9")+
     color   = "red" / "blue" / "green" / "yellow"
-    ws   = " "*
+    _   = " "*
     """
 )
 
 class GameVisitor(NodeVisitor):
     def visit_game(self, node, visited_children):
-        game_id, _, _, _, draws = visited_children        
+        game_id, _, draws = visited_children        
         return game_id, [draw for draw, _, _ in draws]        
     
     def visit_game_id(self, node, visited_children):
